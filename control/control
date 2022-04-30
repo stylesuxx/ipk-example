@@ -1,0 +1,5 @@
+Package: test-package
+Version: 0.0.1
+Maintainer: Your Name <user@example.com>
+Description: This is just a test package
+Architecture: armv7-3.2
