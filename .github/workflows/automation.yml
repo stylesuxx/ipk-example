@@ -1,3 +1,5 @@
+name: Build and release
+
 on:
   # Triggers the workflow on push to master (also merge)
   push:
@@ -26,11 +28,11 @@ jobs:
         id: create_release
         uses: ncipollo/release-action@v1
         with:
-          tag: v${{ github.run_number }}
-          name: v${{ github.run_number }}
+          tag: push-run-${{ github.run_number }}
+          name: push-run-${{ github.run_number }}
           token: ${{ secrets.GITHUB_TOKEN }}
           prerelease: true
-          artifacts: EXAMPLE-IPK-BUILD*/*.ipk
+          artifacts: */*.ipk
 
   build:
     name: Build IPK package
