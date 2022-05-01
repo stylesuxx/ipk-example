@@ -34,15 +34,6 @@ jobs:
             echo IS_TAG: $IS_TAG
             echo SOURCE_TAG: $SOURCE_TAG
 
-
-      - name: Set env
-        env:
-            IS_TAG: ${{ steps.branch_name.outputs.IS_TAG }}
-            SOURCE_TAG: ${{ steps.branch_name.outputs.SOURCE_TAG }}
-        run: |
-          echo "IS_TAG=${IS_TAG}" >> $GITHUB_ENV
-          echo "SOURCE_TAG=${SOURCE_TAG}" >> $GITHUB_ENV
-
       - name: Download artifact
         uses: actions/download-artifact@v2
         with:
@@ -52,7 +43,9 @@ jobs:
         run: ls -R
 
       - name: Create master push pre-release
-        if: !env.IS_TAG
+        env:
+            IS_TAG: ${{ steps.branch_name.outputs.IS_TAG }}
+        if: "${{ env.IS_TAG != true }}"
         id: create_pre_release
         uses: ncipollo/release-action@v1
         with:
@@ -63,7 +56,10 @@ jobs:
           artifacts: ./*/*.ipk
 
       - name: Create tagged release
-        if: env.is_TAG
+        env:
+            IS_TAG: ${{ steps.branch_name.outputs.IS_TAG }}
+            SOURCE_TAG: ${{ steps.branch_name.outputs.SOURCE_TAG }}
+        if: "${{ env.IS_TAG == true }}"
         id: create_release
         uses: ncipollo/release-action@v1
         with:
