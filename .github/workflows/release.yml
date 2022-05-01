@@ -13,7 +13,9 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: ${{ env.ARTIFACT_NAME }}
+
       - name: Unzip artifact
-        run: unzip${{ env.ARTIFACT_NAME }}
+        run: unzip ${{ env.ARTIFACT_NAME }}
+
       - name: View content
         run: ls -R
