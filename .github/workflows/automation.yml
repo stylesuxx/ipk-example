@@ -10,7 +10,7 @@ on:
 
 jobs:
   release:
-    name: Release ipk to GitHub Releases
+    name: Release IPK to GitHub Releases
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -65,14 +65,14 @@ jobs:
       - name: Make artifact name
         id: make_artifactname
         run: |
-          ARTIFACT_NAME="EXAMPLE-IPK-BUILD-${{ github.run_number }}"
+          ARTIFACT_NAME="${{ github.repository }}-${{ github.run_number }}"
           echo "${ARTIFACT_NAME}"
           echo "ARTIFACT_NAME=${ARTIFACT_NAME}" >> $GITHUB_ENV
 
-      - name: Build ipk package
+      - name: Build IPK package
         run: make
 
-      - name: Upload artifact
+      - name: Upload artifact containing all IPKs
         uses: actions/upload-artifact@v2
         with:
           name: ${{ env.ARTIFACT_NAME }}
