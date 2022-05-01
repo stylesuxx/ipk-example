@@ -65,7 +65,8 @@ jobs:
       - name: Make artifact name
         id: make_artifactname
         run: |
-          ARTIFACT_NAME="${{ github.repository }}-${{ github.run_number }}"
+          echo "REPOSITORY_NAME=$(echo '${{ github.repository }}' | awk -F '/' '{print $1}')" >> $GITHUB_ENV
+          ARTIFACT_NAME="${{ env.REPOSITORY_NAME }}-${{ github.run_number }}"
           echo "${ARTIFACT_NAME}"
           echo "ARTIFACT_NAME=${ARTIFACT_NAME}" >> $GITHUB_ENV
 
