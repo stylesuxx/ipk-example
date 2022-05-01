@@ -62,11 +62,13 @@ jobs:
         run: echo "GITHUBBUILDNUMBER=${{ github.run_number }}" >> $GITHUB_ENV
         continue-on-error: true
 
+      - name: Get repository name
+        run: echo "REPOSITORY_NAME=$(echo '${{ github.repository }}' | cut -d '/' -f2)" >> $GITHUB_ENV
+        shell: bash
+
       - name: Make artifact name
         id: make_artifactname
         run: |
-          echo "REPOSITORY_NAME=$(echo '${{ github.repository }}' | cut -d '/' -f2)" >> $GITHUB_ENV
-          echo "${REPOSITORY_NAME}"
           ARTIFACT_NAME="${{ env.REPOSITORY_NAME }}-${{ github.run_number }}"
           echo "${ARTIFACT_NAME}"
           echo "ARTIFACT_NAME=${ARTIFACT_NAME}" >> $GITHUB_ENV
