@@ -1,11 +1,11 @@
 name: Build and release
 
 on:
-  # Triggers the workflow on push to master (also merge)
   push:
     branches: [ master ]
+    tags:
+      - '*'
 
-  # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
 jobs:
@@ -24,7 +24,11 @@ jobs:
       - name: View content
         run: ls -R
 
-      - name: Create Release
+      - name: Set env
+        run: echo "RELEASE_VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
+
+      - name: Create master push pre-release
+        if: ${{ env.RELEASE_VERSION == 'master' }}
         id: create_release
         uses: ncipollo/release-action@v1
         with:
@@ -32,6 +36,17 @@ jobs:
           name: push-run-${{ github.run_number }}
           token: ${{ secrets.GITHUB_TOKEN }}
           prerelease: true
+          artifacts: ./*/*.ipk
+
+      - name: Create tagged release
+        if: ${{ env.RELEASE_VERSION != 'master' }}
+        id: create_release
+        uses: ncipollo/release-action@v1
+        with:
+          tag: ${{ env.RELEASE_VERSION }}
+          name: ${{ env.RELEASE_VERSION }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+          prerelease: false
           artifacts: ./*/*.ipk
 
   build:
