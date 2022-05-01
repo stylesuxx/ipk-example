@@ -34,6 +34,15 @@ jobs:
             echo IS_TAG: $IS_TAG
             echo SOURCE_TAG: $SOURCE_TAG
 
+
+      - name: Set env
+        env:
+            IS_TAG: ${{ steps.branch_name.outputs.IS_TAG }}
+            SOURCE_TAG: ${{ steps.branch_name.outputs.SOURCE_TAG }}
+        run: |
+          echo "IS_TAG=${IS_TAG}" >> $GITHUB_ENV
+          echo "SOURCE_TAG=${SOURCE_TAG}" >> $GITHUB_ENV
+
       - name: Download artifact
         uses: actions/download-artifact@v2
         with:
@@ -42,13 +51,8 @@ jobs:
       - name: View content
         run: ls -R
 
-      - name: Set env
-        run: echo "RELEASE_VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
-
       - name: Create master push pre-release
-        env:
-            IS_TAG: ${{ steps.branch_name.outputs.IS_TAG }}
-        if: ${{ env.IS_TAG == false }}
+        if: !env.IS_TAG
         id: create_pre_release
         uses: ncipollo/release-action@v1
         with:
@@ -59,15 +63,12 @@ jobs:
           artifacts: ./*/*.ipk
 
       - name: Create tagged release
-        env:
-            IS_TAG: ${{ steps.branch_name.outputs.IS_TAG }}
-            SOURCE_TAG: ${{ steps.branch_name.outputs.SOURCE_TAG }}
-        if: ${{ env.IS_TAG == true }}
+        if: env.is_TAG
         id: create_release
         uses: ncipollo/release-action@v1
         with:
-          tag: $SOURCE_TAG
-          name: $SOURCE_TAG
+          tag: ${{ env.SOURCE_TAG }}
+          name: ${{ env.SOURCE_TAG }}
           token: ${{ secrets.GITHUB_TOKEN }}
           prerelease: false
           artifacts: ./*/*.ipk
