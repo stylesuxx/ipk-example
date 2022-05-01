@@ -1,7 +1,9 @@
 name: Release
 
 on:
-  workflow_dispatch:
+  # Triggers the workflow on push to master (also merge)
+  push:
+    branches: [ master ]
 
 jobs:
   release:
