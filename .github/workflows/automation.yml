@@ -30,7 +30,7 @@ jobs:
           name: v${{ github.run_number }}
           token: ${{ secrets.GITHUB_TOKEN }}
           prerelease: true
-          artifacts: ${{ env.ARTIFACT_NAME }}/*.ipk
+          artifacts: EXAMPLE-IPK-BUILD*/*.ipk
 
   build:
     name: Build IPK package
