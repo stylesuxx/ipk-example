@@ -10,6 +10,8 @@ jobs:
   release:
     name: Release ipk to GitHub Releases
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     needs: build
     steps:
       - name: Download artifact
