@@ -32,7 +32,7 @@ jobs:
           name: push-run-${{ github.run_number }}
           token: ${{ secrets.GITHUB_TOKEN }}
           prerelease: true
-          artifacts: */*.ipk
+          artifacts: ./*/*.ipk
 
   build:
     name: Build IPK package
