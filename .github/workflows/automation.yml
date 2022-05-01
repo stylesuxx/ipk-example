@@ -6,6 +6,9 @@ on:
     tags:
       - '*'
 
+  pull_request:
+    branches: [ master ]
+
   workflow_dispatch:
 
 jobs:
@@ -24,14 +27,14 @@ jobs:
           echo ::set-output name=SOURCE_TAG::${GITHUB_REF#refs/tags/}
 
       - name: Display branch names
-        run: |
-            echo $SOURCE_NAME
-            echo $SOURCE_BRANCH
-            echo $SOURCE_TAG
         env:
             SOURCE_NAME: ${{ steps.branch_name.outputs.SOURCE_NAME }}
             SOURCE_BRANCH: ${{ steps.branch_name.outputs.SOURCE_BRANCH }}
             SOURCE_TAG: ${{ steps.branch_name.outputs.SOURCE_TAG }}
+        run: |
+            echo $SOURCE_NAME
+            echo $SOURCE_BRANCH
+            echo $SOURCE_TAG
 
       - name: Download artifact
         uses: actions/download-artifact@v2
