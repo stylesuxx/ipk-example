@@ -29,7 +29,7 @@ jobs:
 
       - name: Create master push pre-release
         if: ${{ env.RELEASE_VERSION == 'master' }}
-        id: create_release
+        id: create_pre_release
         uses: ncipollo/release-action@v1
         with:
           tag: push-run-${{ github.run_number }}
